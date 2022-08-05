@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+
+<body>
+    <form id="form" class="flex-column">
+        <div class="products flex-column">
+            <div>
+                <input type="checkbox" name="product1" id="product1" value="1.5">
+                <label for="product1">Kurşun Kalem: 1.5₺</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="product2" id="product2" value="2">
+                <label for="product2">Silgi: 2₺</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="product3" id="product3" value="5">
+                <label for="product3">Cetvel: 5₺</label>
+            </div>
+
+
+        </div>
+
+        <br><br>
+
+        <div class="payment flex-column">
+            <div class="flex-row space-btwn">
+                <div class="flex-column">
+                    <label for="name">Ad:</label>
+                    <input type="text" name="name" id="name" value="John">
+                </div>
+                <div class="flex-column">
+                    <label for="surname">Soyad:</label>
+                    <input type="text" name="surname" id="surname" value="Doe">
+                </div>
+            </div>
+            <br>
+            <label for="email">E-Mail:</label>
+            <input type="email" name="email" id="email" value="example@gmail.com">
+            <br>
+            <label for="phoneNumber">Telefon Numarası:</label>
+            <div>
+                <span class="phoneCountry">+90</span>
+                <input type="tel" name="phoneNumber" id="phoneNumber" value="5441234567">
+            </div>
+
+            <br>
+            <label for="cardHolderName">Kart Üzerindeki İsim:</label>
+            <input type="text" name="cardHolderName" id="cardHolderName" value="John Doe">
+            <br>
+            <label for="cardNumber">Kart Numarası:</label>
+            <input type="number" name="cardNumber" id="cardNumber" value="5528790000000008">
+            <br>
+            <div class="flex-row space-btwn">
+                <div class="flex-column">
+                    <label for="cvv">CVV:</label>
+                    <input type="number" name="cvv" id="cvv" value="123">
+                </div>
+
+                <div>
+                    <label for="month">Son Kullanma Tarihi:</label>
+                    <div class="flex-row space-even">
+                        <select name="month" id="month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12" selected="selected">12</option>
+                        </select>
+                        <select name="year" id="year">
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030" selected="selected">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
+                            <option value="2033">2033</option>
+                            <option value="2034">2034</option>
+                            <option value="2035">2035</option>
+                            <option value="2036">2036</option>
+                            <option value="2037">2037</option>
+                            <option value="2038">2038</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div><input type="checkbox" name="threeds" id="threeds">
+                <label for="threeds">3D Secure ile öde</label>
+            </div>
+            <br>
+
+            <button type='submit'></button>
+            <p id="info" class="flex-row space-even"></p>
+
+        </div>
+
+    </form>
+
+    <script src="/main.js"></script>
+    <script src="https://static.iyzipay.com/plugins/v1/iyzico-buttons.min.js"></script>
+</body>
+
+</html>

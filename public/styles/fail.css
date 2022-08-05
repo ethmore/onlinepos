@@ -1,0 +1,18 @@
+body {
+    background-color: rgb(240, 240, 240);
+    margin-top: 5%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: larger;
+}
+
+span {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;    
+    justify-content: center;
+    max-width: 300px;
+    margin: auto;
+
+    color: rgb(230, 68, 68);
+}
