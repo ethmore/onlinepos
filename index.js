@@ -32,213 +32,184 @@ app.get("/success", async (req, res) => {
 var str = ""
 
 app.post("/buy", async (req, res) => {
-    const { name, surname, email, phoneNumber, cardHolderName, cardNumber, cvv, month, year, threeds, product1, product2, product3 } = req.body;
+    const { name, surname, email, phoneNumber, cardHolderName, cardNumber, cvv, month, year, threeds } = req.body;
     var countryphoneNumber = '+90' + phoneNumber
 
-    var items = []
-    var item1 = {
-        id: 'BI101',
-        name: 'Web Software',
-        category1: 'Software',
-        itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-        price: 100
-    }
+    if (threeds === true) {
+        var request = {
+            locale: Iyzipay.LOCALE.TR, //not necessary
+            conversationId: '123456789',//not necessary
+            price: '1',
+            paidPrice: '1.2',
+            currency: Iyzipay.CURRENCY.TRY,
+            installment: '1',
+            basketId: 'B67832',//not necessary
+            paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,//not necessary
+            paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,//not necessary
+            callbackUrl: 'http://localhost:3000/callback',
+            paymentCard: {
+                cardHolderName: cardHolderName,
+                cardNumber: cardNumber,
+                expireMonth: month,
+                expireYear: year,
+                cvc: cvv,
+                registerCard: '0'
+            },
+            buyer: {
+                id: 'BY789',
+                name: name,
+                surname: surname,
+                gsmNumber: countryphoneNumber,//not necessary
+                email: email,
+                identityNumber: '74300864791',
+                registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+                ip: '85.34.78.112',
+                city: 'Istanbul',
+                country: 'Turkey',
+            },
+            shippingAddress: {
+                contactName: 'Jane Doe',
+                city: 'Istanbul',
+                country: 'Turkey',
+                address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            },
+            billingAddress: {
+                contactName: 'Jane Doe',
+                city: 'Istanbul',
+                country: 'Turkey',
+                address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            },
+            basketItems:
+            [
+                {
+                    id: 'BI101',
+                    name: 'Binocular',
+                    category1: 'Collectibles',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+                    price: '0.3'
+                },
+                {
+                    id: 'BI102',
+                    name: 'Game code',
+                    category1: 'Game',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
+                    price: '0.5'
+                },
+                {
+                    id: 'BI103',
+                    name: 'Usb',
+                    category1: 'Electronics',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+                    price: '0.2'
+                }
+            ]
+        };
 
-    var item2 = {
-        id: 'BI102',
-        name: 'Windows Software',
-        category1: 'Software',
-        itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-        price: 150
-    }
+        try {
+            iyzipay.threedsInitialize.create(request, function (err, result) {
+                console.log(err, result);
+                if (result.status === "success") {
+                    var b64string = result.threeDSHtmlContent;
+                    var buf = Buffer.from(b64string, 'base64'); // Ta-da
+                    str = buf.toString('utf-8');
 
-    var item3 = {
-        id: 'BI103',
-        name: 'Mobile Software',
-        category1: 'Software',
-        itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-        price: 75
-    }
-
-    const promise1 = new Promise((resolve, reject) => {
-        if (product1 === true || product1 === true || product1 === true) {
-            if (product1 === true) {
-                items.push(item1)
-            } 
-            if (product2 === true) {
-                items.push(item2)
-            }
-            if (product3 === true) {
-                items.push(item3)
-                resolve();
-
-            }
-        } else if (product1 === false || product2 === false || product3 === false) {
-            items = []
-            resolve();
-
+                    res.json({ html: str })
+                } else {
+                    res.json({ message: result.errorMessage })
+                }
+            });
+        } catch (error) {
+            console.log(error)
         }
-    })
-    
-    promise1.then(() => {
-        if (threeds === true) {
-            console.log("w3DS")
-    
-            var request = {
-                locale: Iyzipay.LOCALE.TR, //not necessary
-                conversationId: '123456789',//not necessary
-                price: '1',
-                paidPrice: '1.2',
-                currency: Iyzipay.CURRENCY.TRY,
-                installment: '1',
-                basketId: 'B67832',//not necessary
-                paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,//not necessary
-                paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,//not necessary
-                callbackUrl: 'http://localhost:3000/callback',
-                paymentCard: {
-                    cardHolderName: cardHolderName,
-                    cardNumber: cardNumber,
-                    expireMonth: month,
-                    expireYear: year,
-                    cvc: cvv,
-                    registerCard: '0'
+    } else {
+        console.log("wOut3DS")
+        console.log(name, surname, email, phoneNumber, cardHolderName, cardNumber, cvv, month, year, threeds)
+
+        var request = {
+            locale: Iyzipay.LOCALE.TR, //not necessary
+            conversationId: '123456789',//not necessary
+            price: '1',
+            paidPrice: '1.2',
+            currency: Iyzipay.CURRENCY.TRY,
+            installment: '1',
+            basketId: 'B67832',//not necessary
+            paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,//not necessary
+            paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,//not necessary
+            paymentCard: {
+                cardHolderName: cardHolderName,
+                cardNumber: cardNumber,
+                expireMonth: month,
+                expireYear: year,
+                cvc: cvv,
+                registerCard: '0'
+            },
+            buyer: {
+                id: 'BY789',
+                name: name,
+                surname: surname,
+                gsmNumber: countryphoneNumber,//not necessary
+                email: email,
+                identityNumber: '74300864791',
+                registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+                ip: '85.34.78.112',
+                city: 'Istanbul',
+                country: 'Turkey',
+            },
+            shippingAddress: {
+                contactName: 'Jane Doe',
+                city: 'Istanbul',
+                country: 'Turkey',
+                address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            },
+            billingAddress: {
+                contactName: 'Jane Doe',
+                city: 'Istanbul',
+                country: 'Turkey',
+                address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            },
+            basketItems: 
+            [
+                {
+                    id: 'BI101',
+                    name: 'Binocular',
+                    category1: 'Collectibles',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+                    price: '0.3'
                 },
-                buyer: {
-                    id: 'BY789',
-                    name: name,
-                    surname: surname,
-                    gsmNumber: countryphoneNumber,//not necessary
-                    email: email,
-                    identityNumber: '74300864791',
-                    registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                    ip: '85.34.78.112',
-                    city: 'Istanbul',
-                    country: 'Turkey',
+                {
+                    id: 'BI102',
+                    name: 'Game code',
+                    category1: 'Game',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
+                    price: '0.5'
                 },
-                shippingAddress: {
-                    contactName: 'Jane Doe',
-                    city: 'Istanbul',
-                    country: 'Turkey',
-                    address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                },
-                billingAddress: {
-                    contactName: 'Jane Doe',
-                    city: 'Istanbul',
-                    country: 'Turkey',
-                    address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                },
-                basketItems: items
-                // [
-                //     {
-                //         id: 'BI101',
-                //         name: 'Binocular',
-                //         category1: 'Collectibles',
-                //         itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-                //         price: '0.3'
-                //     },
-                //     {
-                //         id: 'BI102',
-                //         name: 'Game code',
-                //         category1: 'Game',
-                //         itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-                //         price: '0.5'
-                //     },
-                //     {
-                //         id: 'BI103',
-                //         name: 'Usb',
-                //         category1: 'Electronics',
-                //         itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-                //         price: '0.2'
-                //     }
-                // ]
-            };
-    
-            try {
-                iyzipay.threedsInitialize.create(request, function (err, result) {
-                    console.log(err, result);
-                    if (result.status === "success") {
-                        // res.sendFile(path.join(__dirname + '/public/home/success.html'));
-                        // res.json({message : result.threeDSHtmlContent})
-                        var b64string = result.threeDSHtmlContent;
-                        var buf = Buffer.from(b64string, 'base64'); // Ta-da
-                        str = buf.toString('utf-8');
-    
-                        res.json({ html: str })
-                    } else {
-                        res.json({ message: result.errorMessage })
-                    }
-                });
-            } catch (error) {
-                console.log(error)
-            }
-        } else {
-            console.log("wOut3DS")
-            console.log(name, surname, email, phoneNumber, cardHolderName, cardNumber, cvv, month, year, threeds, product1, product2, product3)
-            console.log(items)
-    
-            var request = {
-                locale: Iyzipay.LOCALE.TR, //not necessary
-                conversationId: '123456789',//not necessary
-                price: '1',
-                paidPrice: '1.2',
-                currency: Iyzipay.CURRENCY.TRY,
-                installment: '1',
-                basketId: 'B67832',//not necessary
-                paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,//not necessary
-                paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,//not necessary
-                paymentCard: {
-                    cardHolderName: cardHolderName,
-                    cardNumber: cardNumber,
-                    expireMonth: month,
-                    expireYear: year,
-                    cvc: cvv,
-                    registerCard: '0'
-                },
-                buyer: {
-                    id: 'BY789',
-                    name: name,
-                    surname: surname,
-                    gsmNumber: countryphoneNumber,//not necessary
-                    email: email,
-                    identityNumber: '74300864791',
-                    registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                    ip: '85.34.78.112',
-                    city: 'Istanbul',
-                    country: 'Turkey',
-                },
-                shippingAddress: {
-                    contactName: 'Jane Doe',
-                    city: 'Istanbul',
-                    country: 'Turkey',
-                    address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                },
-                billingAddress: {
-                    contactName: 'Jane Doe',
-                    city: 'Istanbul',
-                    country: 'Turkey',
-                    address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
-                },
-                basketItems: items
-            };
-    
-            try {
-                iyzipay.payment.create(request, function (err, result) {
-                    console.log(err, result);
-                    if (result.status === "success") {
-                        res.json({ message: "Odeme Basarili" })
-                    } else {
-                        res.json({ message: result.errorMessage })
-                    }
-                });
-            } catch (error) {
-                console.log(error)
-            }
+                {
+                    id: 'BI103',
+                    name: 'Usb',
+                    category1: 'Electronics',
+                    itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+                    price: '0.2'
+                }
+            ]
+        };
+
+        try {
+            iyzipay.payment.create(request, function (err, result) {
+                console.log(err, result);
+                if (result.status === "success") {
+                    res.json({ message: "Odeme Basarili" })
+                } else {
+                    res.json({ message: result.errorMessage })
+                }
+            });
+        } catch (error) {
+            console.log(error)
         }
-    
-    })
+    }
+
+})
 
 
-});
 
 app.get('/3ds', (req, res) => {
     res.send(str)

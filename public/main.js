@@ -13,9 +13,6 @@ function submitFunc(e) {
     const month = document.getElementById("month");
     const year = document.getElementById("year");
     const threeds = document.getElementById("threeds");
-    const product1 = document.getElementById("product1");
-    const product2 = document.getElementById("product2");
-    const product3 = document.getElementById("product3");
 
     const data = {
         name: name.value,
@@ -28,9 +25,6 @@ function submitFunc(e) {
         month: month.value,
         year: year.value,
         threeds: threeds.checked,
-        product1: product1.checked,
-        product2: product2.checked,
-        product3: product3.checked
     }
 
     if (threeds.checked === true) {
